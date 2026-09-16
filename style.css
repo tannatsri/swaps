@@ -1,0 +1,892 @@
+/* ════════════════════════════════════════════════════════
+   COZY CORNER  ·  style.css
+
+   Table of contents
+   ─────────────────
+   1.  Reset & base
+   2.  CSS custom properties (theme)
+   3.  Typography
+   4.  Grain texture
+   5.  Background floats
+   6.  Landing section
+   7.  Shared section styles
+   8.  Wishes grid  (section 2)
+   9.  Open-when letters  (section 3)
+   10. Bear game  (section 4)
+   11. Allowed today  (section 5)
+   12. Photos  (section 6)
+   13. Audio card  (section 7)
+   14. Ending  (section 8)
+   15. Buttons
+   16. Keyframe animations
+   17. Reduced-motion overrides
+   ════════════════════════════════════════════════════════ */
+
+
+/* ─── 1. Reset & base ─────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-body);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+
+/* ─── 2. CSS custom properties ────────────────────────── */
+:root {
+  /* ── Palette ── */
+  --bg:              #FDF8F2;      /* warm cream */
+  --bg-alt:          #F3EDF8;      /* soft lavender wash */
+  --card-bg:         #FFFCF8;      /* nearly white, warm */
+  --card-border:     rgba(160, 120, 100, 0.10);
+
+  --rose:            #C87970;      /* muted terracotta-rose */
+  --rose-soft:       #E8AFA8;
+  --rose-pale:       #FAF0EE;
+
+  --lavender:        #9A8DC2;      /* dusty violet */
+  --lavender-pale:   #EDE9F9;
+
+  --honey:           #CF9346;      /* warm amber */
+  --honey-pale:      #FDF4E3;
+
+  --sage:            #7BAA85;      /* muted green */
+  --sage-pale:       #EEF5EF;
+
+  --text-dark:       #261A15;
+  --text-body:       #5A4840;
+  --text-muted:      #9A8478;
+
+  /* ── Shadows ── */
+  --shadow-sm:   0 2px 10px rgba(100, 65, 50, 0.07);
+  --shadow-md:   0 4px 20px rgba(100, 65, 50, 0.10);
+  --shadow-lg:   0 8px 32px rgba(100, 65, 50, 0.14);
+
+  /* ── Shape ── */
+  --radius-sm:  12px;
+  --radius-md:  20px;
+  --radius-lg:  28px;
+  --radius-pill: 999px;
+
+  /* ── Typography ── */
+  --font-body:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: Georgia, 'Times New Roman', serif;
+  --font-hand:  'Segoe Script', 'Bradley Hand ITC', 'Apple Chancery',
+                'Snell Roundhand', cursive;
+  /*
+   * Using Google Fonts? After uncommenting the <link> in index.html:
+   *   --font-body:  'Inter', sans-serif;
+   *   --font-hand:  'Caveat', cursive;
+   */
+
+  /* ── Transitions ── */
+  --ease:       cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --t-fast:  0.18s;
+  --t-base:  0.30s;
+  --t-slow:  0.55s;
+}
+
+
+/* ─── 3. Typography ───────────────────────────────────── */
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  color: var(--text-dark);
+  font-weight: normal;
+  line-height: 1.2;
+}
+
+.handwrite {
+  font-family: var(--font-hand);
+  line-height: 1.4;
+}
+
+em {
+  font-style: italic;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.section-title {
+  font-size: clamp(1.35rem, 4vw, 1.85rem);
+  margin-bottom: 0.4rem;
+  color: var(--text-dark);
+}
+
+.section-sub {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+}
+
+
+/* ─── 4. Grain texture ────────────────────────────────── */
+#grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9000;
+  opacity: 0.038;
+  /* Background set by JS via canvas */
+}
+
+
+/* ─── 5. Background floats ────────────────────────────── */
+#bg-floats {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.float-el {
+  position: absolute;
+  bottom: -40px;
+  font-size: var(--el-size, 1rem);
+  opacity: 0;
+  animation: float-up var(--el-dur, 12s) var(--el-delay, 0s) linear infinite;
+  will-change: transform, opacity;
+  user-select: none;
+}
+
+@keyframes float-up {
+  0%   { transform: translateY(0)       rotate(0deg);   opacity: 0; }
+  8%   { opacity: var(--el-opacity, 0.18); }
+  88%  { opacity: var(--el-opacity, 0.18); }
+  100% { transform: translateY(-110vh)  rotate(var(--el-rot, 180deg)); opacity: 0; }
+}
+
+
+/* ─── 6. Landing section ──────────────────────────────── */
+#sec-landing {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1.25rem;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 40%, rgba(232, 175, 168, 0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 70% at 75% 70%, rgba(154, 141, 194, 0.16) 0%, transparent 60%),
+    var(--bg);
+  z-index: 1;
+  transition: opacity var(--t-slow) var(--ease), transform var(--t-slow) var(--ease);
+}
+
+#sec-landing.exiting {
+  opacity: 0;
+  transform: translateY(-24px);
+  pointer-events: none;
+}
+
+.landing-inner {
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.landing-inner .eyebrow {
+  margin-bottom: 0.2rem;
+}
+
+#sec-landing h1 {
+  font-size: clamp(2.4rem, 9vw, 3.8rem);
+  font-family: var(--font-serif);
+}
+
+.pulse-heart {
+  display: inline-block;
+  animation: heart-pulse 2.2s var(--ease-spring) infinite;
+}
+
+@keyframes heart-pulse {
+  0%, 100% { transform: scale(1); }
+  40%       { transform: scale(1.18); }
+  55%       { transform: scale(0.95); }
+  70%       { transform: scale(1.08); }
+}
+
+.landing-sub {
+  font-size: clamp(1rem, 3vw, 1.15rem);
+  color: var(--text-body);
+  line-height: 1.75;
+}
+
+.landing-note {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+
+/* ─── 7. Shared section styles ────────────────────────── */
+#main-content {
+  position: relative;
+  z-index: 1;
+  animation: fade-in-up 0.6s var(--ease) both;
+}
+
+.section {
+  padding: clamp(3rem, 8vw, 5.5rem) 1.25rem;
+}
+
+.section-alt {
+  background:
+    radial-gradient(ellipse 90% 70% at 70% 30%, rgba(154, 141, 194, 0.10) 0%, transparent 70%),
+    var(--bg-alt);
+}
+
+.section-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.section-inner.center {
+  text-align: center;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ─── 8. Wishes grid ──────────────────────────────────── */
+.wishes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.9rem;
+}
+
+@media (min-width: 560px) {
+  .wishes-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.wish-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1rem 1.1rem;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition:
+    transform var(--t-base) var(--ease-spring),
+    box-shadow var(--t-base) var(--ease);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  text-align: center;
+}
+
+.wish-card:hover,
+.wish-card:focus-visible {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-md);
+  outline: none;
+}
+
+.wish-card:active {
+  transform: scale(0.96);
+}
+
+.wish-emoji {
+  font-size: 1.8rem;
+  display: block;
+  margin-bottom: 0.45rem;
+  transition: transform var(--t-base) var(--ease-spring);
+}
+
+.wish-card:hover .wish-emoji,
+.wish-card.expanded .wish-emoji {
+  transform: scale(1.15);
+}
+
+.wish-label {
+  font-size: 0.82rem;
+  color: var(--text-body);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.wish-message {
+  font-size: 0.8rem;
+  color: var(--rose);
+  line-height: 1.5;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition:
+    max-height 0.35s var(--ease),
+    opacity 0.25s var(--ease),
+    margin-top 0.25s var(--ease);
+  font-style: italic;
+}
+
+.wish-card.expanded .wish-message {
+  max-height: 120px;
+  opacity: 1;
+  margin-top: 0.6rem;
+}
+
+
+/* ─── 9. Open-when letters ────────────────────────────── */
+.letters-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 520px) {
+  .letters-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.letter-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  min-height: 120px;
+  transition:
+    transform var(--t-base) var(--ease-spring),
+    box-shadow var(--t-base) var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.letter-card:hover,
+.letter-card:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  outline: none;
+}
+
+/* Closed face */
+.letter-front {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1.25rem 1.35rem;
+  transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
+}
+
+.letter-icon {
+  font-size: 1.75rem;
+  flex-shrink: 0;
+}
+
+.letter-label {
+  font-size: 0.9rem;
+  color: var(--text-body);
+  line-height: 1.4;
+}
+
+.letter-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+  font-style: italic;
+}
+
+/* Open face */
+.letter-back {
+  position: absolute;
+  inset: 0;
+  padding: 1.35rem 1.4rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.letter-back-text {
+  font-size: 0.88rem;
+  color: var(--text-body);
+  line-height: 1.65;
+}
+
+.letter-close {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Toggled state */
+.letter-card.open .letter-front {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+.letter-card.open .letter-back {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Color accents per card */
+.letter-card[data-accent="rose"]     { border-top: 3px solid var(--rose-soft); }
+.letter-card[data-accent="lavender"] { border-top: 3px solid var(--lavender); }
+.letter-card[data-accent="honey"]    { border-top: 3px solid var(--honey); }
+.letter-card[data-accent="sage"]     { border-top: 3px solid var(--sage); }
+.letter-card[data-accent="rose2"]    { border-top: 3px solid var(--rose); }
+
+/* Hug card special animation */
+.hug-anim {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.hug-left  { animation: hug-slide-in-left  1s var(--ease-spring) both; }
+.hug-right { animation: hug-slide-in-right 1s var(--ease-spring) 0.15s both; }
+.hug-mid   { animation: hug-pop 0.5s var(--ease-spring) 0.7s both; opacity: 0; }
+
+@keyframes hug-slide-in-left {
+  from { transform: translateX(-28px); }
+  to   { transform: translateX(0); }
+}
+@keyframes hug-slide-in-right {
+  from { transform: translateX(28px); }
+  to   { transform: translateX(0); }
+}
+@keyframes hug-pop {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+
+/* ─── 10. Bear game ────────────────────────────────────── */
+.game-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+}
+
+.heart-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.bear-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 2.2rem 3rem;
+  cursor: pointer;
+  transition:
+    transform var(--t-fast) var(--ease-spring),
+    box-shadow var(--t-fast) var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bear-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.bear-btn:active,
+.bear-btn.shaking {
+  animation: bear-shake 0.35s var(--ease) both;
+}
+
+.bear-emoji {
+  font-size: 3.5rem;
+  display: block;
+  transition: transform var(--t-fast) var(--ease-spring);
+  user-select: none;
+}
+
+.bear-speech {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-style: italic;
+  min-height: 1.3em;
+  transition: opacity 0.2s;
+}
+
+.hug-counter {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-style: italic;
+  min-height: 1.4em;
+}
+
+/* Floating hearts from the game */
+.pop-heart {
+  position: absolute;
+  font-size: 1.2rem;
+  pointer-events: none;
+  animation: pop-float 1.1s var(--ease) forwards;
+  user-select: none;
+  opacity: 0;
+}
+
+@keyframes pop-float {
+  0%   { transform: translateY(0) scale(0.5);  opacity: 0; }
+  20%  { transform: translateY(-15px) scale(1.1); opacity: 1; }
+  100% { transform: translateY(-80px) scale(0.8); opacity: 0; }
+}
+
+@keyframes bear-shake {
+  0%, 100% { transform: rotate(0deg); }
+  20%       { transform: rotate(-6deg) scale(1.05); }
+  40%       { transform: rotate(6deg)  scale(1.08); }
+  60%       { transform: rotate(-4deg); }
+  80%       { transform: rotate(4deg); }
+}
+
+
+/* ─── 11. Allowed today ────────────────────────────────── */
+.allowed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 2.5rem;
+  max-width: 480px;
+}
+
+.allowed-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-sm);
+  transition: background var(--t-fast) var(--ease);
+  opacity: 0;
+  animation: item-appear 0.45s var(--ease) both;
+}
+
+.allowed-item:hover {
+  background: rgba(200, 121, 112, 0.06);
+}
+
+.check-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 0.05em;
+}
+
+.allowed-text {
+  font-size: 1.0rem;
+  color: var(--text-body);
+  line-height: 1.5;
+}
+
+@keyframes item-appear {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.doctor-note {
+  margin-top: 1rem;
+  padding: 1.2rem 1.4rem;
+  background: var(--honey-pale);
+  border-radius: var(--radius-md);
+  border: 1px dashed rgba(207, 147, 70, 0.4);
+  display: inline-block;
+}
+
+.doctor-heading {
+  font-size: 1.2rem;
+  color: var(--honey);
+}
+
+.doctor-fine-print {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+
+/* ─── 12. Photos ───────────────────────────────────────── */
+.photos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 600px) {
+  .photos-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.polaroid {
+  background: #fff;
+  padding: 0.7rem 0.7rem 1.8rem;
+  box-shadow: var(--shadow-md);
+  transform: rotate(var(--rot, -1.5deg));
+  transition: transform var(--t-base) var(--ease-spring), box-shadow var(--t-base) var(--ease);
+  position: relative;
+}
+
+.polaroid:hover {
+  transform: rotate(0deg) scale(1.04);
+  box-shadow: var(--shadow-lg);
+  z-index: 2;
+}
+
+.polaroid img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  background: var(--bg-alt);
+}
+
+.polaroid-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(135deg, var(--rose-pale), var(--lavender-pale));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  opacity: 0.5;
+}
+
+.polaroid-caption {
+  font-family: var(--font-hand);
+  font-size: 0.82rem;
+  color: var(--text-body);
+  text-align: center;
+  margin-top: 0.5rem;
+  line-height: 1.3;
+  /* EDIT THESE in script.js → PHOTO_CAPTIONS array */
+}
+
+/* Hide missing photo cards */
+.polaroid.hidden {
+  display: none;
+}
+
+
+/* ─── 13. Audio card ───────────────────────────────────── */
+.audio-card {
+  max-width: 400px;
+  margin: 0 auto;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 2rem 2rem;
+  text-align: center;
+}
+
+.audio-icon {
+  font-size: 2.2rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.audio-title {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  margin-bottom: 0.3rem;
+}
+
+.audio-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+  font-style: italic;
+}
+
+audio {
+  width: 100%;
+  border-radius: var(--radius-pill);
+  accent-color: var(--rose);
+}
+
+.audio-placeholder-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.6;
+  margin-top: 0.5rem;
+}
+
+
+/* ─── 14. Ending ───────────────────────────────────────── */
+.ending-section {
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 100%, rgba(232, 175, 168, 0.15) 0%, transparent 70%),
+    var(--bg);
+  padding-bottom: clamp(4rem, 10vw, 7rem);
+}
+
+.ending-wrap {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.ending-line {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 5vw, 2.2rem);
+  color: var(--text-dark);
+  margin-bottom: 1.5rem;
+}
+
+.ending-body {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 2;
+  margin-bottom: 2rem;
+}
+
+.ending-main {
+  font-size: clamp(1rem, 3.5vw, 1.2rem);
+  color: var(--text-body);
+  line-height: 1.75;
+  margin-bottom: 1.75rem;
+}
+
+.ending-main em {
+  color: var(--rose);
+}
+
+.ending-sig {
+  font-size: 1.4rem;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+}
+
+
+/* ─── 15. Buttons ──────────────────────────────────────── */
+.btn-enter {
+  background: var(--text-dark);
+  color: #FDF8F2;
+  font-size: 1.05rem;
+  padding: 0.85rem 2.2rem;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 4px 18px rgba(38, 26, 21, 0.25);
+  transition:
+    transform var(--t-fast) var(--ease-spring),
+    box-shadow var(--t-fast) var(--ease),
+    background var(--t-fast);
+  letter-spacing: 0.01em;
+}
+
+.btn-enter:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 26px rgba(38, 26, 21, 0.30);
+}
+
+.btn-enter:active {
+  transform: scale(0.97);
+}
+
+.btn-enter:focus-visible {
+  outline: 2px solid var(--rose);
+  outline-offset: 3px;
+}
+
+.btn-return {
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-pill);
+  padding: 0.7rem 1.8rem;
+  transition:
+    color var(--t-fast),
+    border-color var(--t-fast),
+    transform var(--t-fast) var(--ease-spring);
+}
+
+.btn-return:hover {
+  color: var(--text-body);
+  border-color: rgba(160, 120, 100, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-return:focus-visible {
+  outline: 2px solid var(--rose);
+  outline-offset: 3px;
+}
+
+
+/* ─── 16. Utilities ────────────────────────────────────── */
+[hidden] { display: none !important; }
+
+
+/* ─── 17. Reduced-motion overrides ────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html { scroll-behavior: auto; }
+
+  .float-el { display: none; }
+
+  .pulse-heart { animation: none; }
+
+  .pop-heart { animation: none; opacity: 0; }
+}

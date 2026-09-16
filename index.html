@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hey Bitchhhhh ❤️</title>
+
+  <!--
+    ╔══════════════════════════════════════════════╗
+    ║  OPTIONAL: Better fonts (needs internet)     ║
+    ║  Uncomment the line below for nicer type.    ║
+    ║  Falls back gracefully if offline.           ║
+    ╚══════════════════════════════════════════════╝
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    Then in style.css, change:
+      --font-body  →  'Inter', sans-serif
+      --font-hand  →  'Caveat', cursive
+  -->
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Grain texture overlay (applied via JS to avoid FOUC) -->
+  <div id="grain" aria-hidden="true"></div>
+
+  <!-- Floating background elements (populated by JS) -->
+  <div id="bg-floats" aria-hidden="true"></div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       SECTION 1 — Landing
+       ══════════════════════════════════════════════════ -->
+  <section id="sec-landing" aria-label="Welcome">
+    <div class="landing-inner">
+      <p class="eyebrow" aria-hidden="true">just for you · just for today</p>
+      <h1>Hey Bitchhhhh<span class="pulse-heart" aria-hidden="true">❤️</span></h1>
+      <p class="landing-sub">
+        I know today is kinda terrible.<br>
+        So I made you a tiny corner of the internet.<br>
+        Just for you. Just for today.
+      </p>
+      <button class="btn-enter" id="enterBtn" aria-label="Enter the site">
+        Come in <span aria-hidden="true">→</span>
+      </button>
+      <p class="landing-note">No productivity required here.</p>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════
+       MAIN — hidden until entry
+       ══════════════════════════════════════════════════ -->
+  <main id="main-content" hidden aria-hidden="true">
+
+
+    <!-- ── Section 2: Wishes ──────────────────────────── -->
+    <section class="section" id="sec-wishes" aria-label="Things I wish I could do">
+      <div class="section-inner">
+        <h2 class="section-title">things I wish I could do right now</h2>
+        <p class="section-sub">tap one</p>
+        <div class="wishes-grid" id="wishesGrid" role="list">
+          <!-- Populated by script.js — see WISHES array -->
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ── Section 3: Open When ───────────────────────── -->
+    <section class="section section-alt" id="sec-letters" aria-label="Open when letters">
+      <div class="section-inner">
+        <h2 class="section-title">open when…</h2>
+        <p class="section-sub">tap whichever feels right</p>
+        <div class="letters-grid" id="lettersGrid" role="list">
+          <!-- Populated by script.js — see LETTERS array -->
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ── Section 4: Bear Game ───────────────────────── -->
+    <section class="section" id="sec-game" aria-label="Emergency hug station">
+      <div class="section-inner center">
+        <h2 class="section-title">emergency hug station <span aria-hidden="true">🚨</span></h2>
+        <p class="section-sub">do with this what you will</p>
+
+        <div class="game-wrap">
+          <!-- Heart burst layer (JS-managed) -->
+          <div class="heart-field" id="heartField" aria-hidden="true"></div>
+
+          <!-- The bear -->
+          <button class="bear-btn" id="bearBtn"
+                  aria-label="Click for a hug"
+                  aria-live="polite">
+            <span class="bear-emoji" id="bearEmoji" aria-hidden="true">🐻</span>
+            <span class="bear-speech" id="bearSpeech">click me</span>
+          </button>
+
+          <!-- Hug counter -->
+          <p class="hug-counter" id="hugCounter" aria-live="polite" aria-atomic="true"></p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ── Section 5: Allowed Today ───────────────────── -->
+    <section class="section section-alt" id="sec-allowed" aria-label="Things allowed today">
+      <div class="section-inner">
+        <h2 class="section-title">things that are officially allowed today</h2>
+        <ul class="allowed-list" id="allowedList" aria-label="Official allowances">
+          <!-- Populated by script.js — see ALLOWED array -->
+        </ul>
+        <div class="doctor-note" aria-label="Doctor's orders">
+          <p class="doctor-heading handwrite">Doctor's orders</p>
+          <p class="doctor-fine-print">
+            * Doctor not actually consulted. Boyfriend orders only.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ── Section 6: Photos ──────────────────────────── -->
+    <!--
+      DROP YOUR PHOTOS INTO:  assets/photos/
+      Supported names:  photo1.jpg  photo2.jpg  photo3.jpg  photo4.jpg  photo5.jpg  photo6.jpg
+      Edit captions inside PHOTO_CAPTIONS in script.js
+      Missing photos are hidden automatically — no broken images.
+    -->
+    <section class="section" id="sec-photos" aria-label="Photos">
+      <div class="section-inner">
+        <h2 class="section-title">some evidence</h2>
+        <p class="section-sub">that you're actually very cute</p>
+        <div class="photos-grid" id="photosGrid" aria-label="Photo memories">
+          <!-- Populated by script.js -->
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ── Section 7: Voice Message ──────────────────── -->
+    <!--
+      DROP YOUR AUDIO FILE INTO:  assets/audio/message.mp3
+      If the file doesn't exist, a friendly placeholder shows instead.
+      Audio does NOT autoplay.
+    -->
+    <section class="section section-alt" id="sec-audio" aria-label="Voice message">
+      <div class="section-inner center">
+        <div class="audio-card" id="audioCard">
+          <!-- Populated by script.js — shows player or placeholder -->
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ── Section 8: Ending ──────────────────────────── -->
+    <section class="section ending-section" id="sec-ending" aria-label="Closing message">
+      <div class="section-inner center">
+        <div class="ending-wrap">
+          <p class="ending-line">That's it.</p>
+          <p class="ending-body">
+            No fixing things.<br>
+            No advice.<br>
+            No pretending today has to be productive.
+          </p>
+          <p class="ending-main">
+            Just a little reminder that<br>
+            <em>you don't have to deal with today alone.</em>
+          </p>
+          <p class="ending-sig handwrite" id="endingSig">
+            <!-- Populated by script.js using PERSONALIZATION.myName -->
+          </p>
+          <button class="btn-return" onclick="scrollToTop()" aria-label="Go back to the top">
+            Come back whenever you need me :)
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+  </main><!-- /main-content -->
+
+  <script src="script.js"></script>
+</body>
+</html>
