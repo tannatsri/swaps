@@ -455,11 +455,20 @@ function buildWishes() {
 
 
 /* ══════════════════════════════════════════════════════════
-   SECTION 3 — OPEN WHEN LETTERS
+   SECTION 3 — OPEN WHEN LETTERS  (opens in a centered modal)
    ══════════════════════════════════════════════════════════ */
 function buildLetters() {
     const grid = document.getElementById("lettersGrid");
     if (!grid) return;
+
+    // Accent colour lookup for the modal top border
+    const ACCENT_VARS = {
+        rose:     "var(--rose-soft)",
+        lavender: "var(--lavender)",
+        honey:    "var(--honey)",
+        sage:     "var(--sage)",
+        rose2:    "var(--rose)",
+    };
 
     LETTERS.forEach((letter) => {
         const card = document.createElement("div");
@@ -469,30 +478,6 @@ function buildLetters() {
         card.setAttribute("data-accent", letter.accent);
         card.setAttribute("aria-label", `Open when ${letter.label}`);
 
-        let backHTML = "";
-        if (letter.type === "hug") {
-            backHTML = `
-        <div class="hug-anim" aria-label="hug animation">
-          <span class="hug-left"  aria-hidden="true">🤗</span>
-          <span class="hug-mid"   aria-hidden="true">🫂</span>
-          <span class="hug-right" aria-hidden="true">🤗</span>
-        </div>
-        <p class="letter-back-text">${letter.message.replace(/\n/g, "<br>")}</p>
-        <p class="letter-close">tap to close</p>
-      `;
-        } else if (letter.type === "game") {
-            backHTML = `
-        <p class="letter-back-text" style="font-style:italic; color: var(--rose)">
-          okay, going there now… 🐻
-        </p>
-      `;
-        } else {
-            backHTML = `
-        <p class="letter-back-text">${letter.message.replace(/\n/g, "<br>")}</p>
-        <p class="letter-close">tap to close</p>
-      `;
-        }
-
         card.innerHTML = `
       <div class="letter-front">
         <span class="letter-icon" aria-hidden="true">${letter.emoji}</span>
@@ -501,7 +486,6 @@ function buildLetters() {
           <p class="letter-hint">${letter.hint}</p>
         </div>
       </div>
-      <div class="letter-back">${backHTML}</div>
     `;
 
         const handleOpen = () => {
@@ -514,18 +498,7 @@ function buildLetters() {
                 }
                 return;
             }
-
-            const isOpen = card.classList.toggle("open");
-            card.setAttribute("aria-expanded", String(isOpen));
-
-            if (letter.type === "hug" && isOpen) {
-                const parts = card.querySelectorAll(".hug-left, .hug-right, .hug-mid");
-                parts.forEach((p) => {
-                    p.style.animation = "none";
-                    void p.offsetWidth;
-                    p.style.animation = "";
-                });
-            }
+            openLetterModal(letter, ACCENT_VARS[letter.accent] || "var(--rose-soft)");
         };
 
         card.addEventListener("click", handleOpen);
@@ -535,6 +508,68 @@ function buildLetters() {
 
         grid.appendChild(card);
     });
+}
+
+function openLetterModal(letter, accentVar) {
+    // Build inner content
+    let contentHTML = "";
+    if (letter.type === "hug") {
+        contentHTML = `
+      <div class="hug-anim" aria-label="hug animation">
+        <span class="hug-left"  aria-hidden="true">🤗</span>
+        <span class="hug-mid"   aria-hidden="true">🫂</span>
+        <span class="hug-right" aria-hidden="true">🤗</span>
+      </div>
+      <p class="letter-modal-text">${letter.message.replace(/\n/g, "<br>")}</p>
+    `;
+    } else {
+        contentHTML = `
+      <p class="letter-modal-text">${letter.message.replace(/\n/g, "<br>")}</p>
+    `;
+    }
+
+    const overlay = document.createElement("div");
+    overlay.className = "letter-modal-overlay";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-label", `Open when ${letter.label}`);
+
+    overlay.innerHTML = `
+    <div class="letter-modal-box" style="--modal-accent: ${accentVar}">
+      <button class="letter-modal-close" aria-label="Close">✕</button>
+      <span class="letter-modal-icon" aria-hidden="true">${letter.emoji}</span>
+      <p class="letter-modal-label">open when ${letter.label}</p>
+      ${contentHTML}
+      <span class="letter-modal-tap-close">tap outside to close</span>
+    </div>
+  `;
+
+    const close = () => {
+        overlay.classList.add("leaving");
+        setTimeout(() => overlay.remove(), 260);
+        document.removeEventListener("keydown", onKey);
+    };
+
+    const onKey = (e) => { if (e.key === "Escape") close(); };
+
+    // Tap backdrop closes, but not the box itself
+    overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) close();
+    });
+    overlay.querySelector(".letter-modal-close").addEventListener("click", close);
+    document.addEventListener("keydown", onKey);
+
+    document.body.appendChild(overlay);
+
+    // Re-trigger hug animation each open
+    if (letter.type === "hug") {
+        const parts = overlay.querySelectorAll(".hug-left, .hug-right, .hug-mid");
+        parts.forEach((p) => {
+            p.style.animation = "none";
+            void p.offsetWidth;
+            p.style.animation = "";
+        });
+    }
 }
 
 

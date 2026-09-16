@@ -412,7 +412,6 @@ em {
   align-items: center;
   gap: 0.85rem;
   padding: 1.25rem 1.35rem;
-  transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
 }
 
 .letter-icon {
@@ -433,45 +432,86 @@ em {
   font-style: italic;
 }
 
-/* Open face */
-.letter-back {
-  position: absolute;
+/* ── Letter modal (opens centered on click) ─────────────── */
+.letter-modal-overlay {
+  position: fixed;
   inset: 0;
-  padding: 1.35rem 1.4rem;
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity var(--t-base) var(--ease), transform var(--t-base) var(--ease);
-  pointer-events: none;
+  background: rgba(38, 26, 21, 0.32);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 9500;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  padding: 1.5rem;
+  cursor: pointer;
+  animation: fade-in 0.22s ease both;
 }
 
-.letter-back-text {
-  font-size: 0.88rem;
+.letter-modal-overlay.leaving {
+  animation: fade-out 0.25s ease forwards;
+}
+
+.letter-modal-box {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 2.2rem 2rem 1.8rem;
+  max-width: 420px;
+  width: 100%;
+  cursor: default;
+  position: relative;
+  animation: letter-modal-pop 0.38s var(--ease-spring) both;
+  border-top: 4px solid var(--modal-accent, var(--rose-soft));
+}
+
+@keyframes letter-modal-pop {
+  from { opacity: 0; transform: scale(0.88) translateY(18px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+.letter-modal-close {
+  position: absolute;
+  top: 0.9rem;
+  right: 1rem;
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.2rem 0.4rem;
+  border-radius: 50%;
+  transition: color var(--t-fast), background var(--t-fast);
+}
+.letter-modal-close:hover { color: var(--text-dark); background: var(--rose-pale); }
+
+.letter-modal-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.85rem;
+}
+
+.letter-modal-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.letter-modal-text {
+  font-size: 0.95rem;
   color: var(--text-body);
-  line-height: 1.65;
+  line-height: 1.75;
 }
 
-.letter-close {
+.letter-modal-tap-close {
   font-size: 0.72rem;
   color: var(--text-muted);
-  margin-top: 0.5rem;
+  margin-top: 1.5rem;
   font-style: italic;
-}
-
-/* Toggled state */
-.letter-card.open .letter-front {
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
-}
-
-.letter-card.open .letter-back {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+  display: block;
 }
 
 /* Color accents per card */
