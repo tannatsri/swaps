@@ -890,3 +890,305 @@ audio {
 
   .pop-heart { animation: none; opacity: 0; }
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   ★  NEW FEATURES — appended
+   ═══════════════════════════════════════════════════════════ */
+
+
+/* ── Cursor sparkle trail ─────────────────────────────────── */
+.cursor-sparkle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+  transform: translate(-50%, -50%);
+  animation: sparkle-fade 0.9s var(--ease) forwards;
+  line-height: 1;
+}
+
+@keyframes sparkle-fade {
+  0%   { opacity: 0.9; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0;   transform: translate(-50%, -150%) scale(0.4); }
+}
+
+
+/* ── Toast notification ───────────────────────────────────── */
+.site-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-lg);
+  padding: 0.65rem 1.15rem;
+  font-size: 0.83rem;
+  color: var(--text-body);
+  z-index: 8000;
+  max-width: 260px;
+  cursor: pointer;
+  animation: toast-in 0.4s var(--ease-spring) both;
+  backdrop-filter: blur(6px);
+}
+
+.site-toast.leaving {
+  animation: toast-out 0.3s var(--ease) forwards;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(20px) scale(0.92); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(8px); }
+}
+
+@media (max-width: 480px) {
+  .site-toast {
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+    max-width: none;
+    text-align: center;
+  }
+}
+
+
+/* ── Compliment overlay ───────────────────────────────────── */
+.compliment-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(38, 26, 21, 0.28);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 9500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  cursor: pointer;
+  animation: fade-in 0.2s ease both;
+}
+
+.compliment-overlay.leaving {
+  animation: fade-out 0.3s ease forwards;
+}
+
+@keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+
+.compliment-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem 2rem;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  cursor: default;
+  animation: compliment-pop 0.4s var(--ease-spring) both;
+}
+
+@keyframes compliment-pop {
+  from { opacity: 0; transform: scale(0.82) translateY(24px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+.compliment-emoji {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+  animation: heart-pulse 2.2s var(--ease-spring) infinite;
+}
+
+.compliment-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 3.5vw, 1.15rem);
+  color: var(--text-dark);
+  line-height: 1.65;
+  font-style: italic;
+}
+
+.compliment-close {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 1.35rem;
+  font-style: italic;
+}
+
+
+/* ── Surprise compliment button ───────────────────────────── */
+.surprise-btn {
+  display: inline-block;
+  margin-top: 2rem;
+  background: var(--rose-pale);
+  border: 1px dashed var(--rose-soft);
+  color: var(--rose);
+  font-size: 0.88rem;
+  font-family: var(--font-body);
+  padding: 0.72rem 1.6rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition:
+    background var(--t-fast),
+    color var(--t-fast),
+    transform var(--t-fast) var(--ease-spring),
+    box-shadow var(--t-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.surprise-btn:hover {
+  background: var(--rose-soft);
+  color: #fff;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: var(--shadow-md);
+}
+
+.surprise-btn:active {
+  transform: scale(0.97);
+}
+
+.surprise-btn:focus-visible {
+  outline: 2px solid var(--rose);
+  outline-offset: 3px;
+}
+
+
+/* ── Confetti pieces ──────────────────────────────────────── */
+.confetti-piece {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  user-select: none;
+  line-height: 1;
+  animation: confetti-fly var(--cf-dur, 1.2s) var(--cf-delay, 0s) var(--ease) forwards;
+}
+
+@keyframes confetti-fly {
+  0%   { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1); }
+  60%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--cf-x, 0px), var(--cf-y, 80px))
+                                rotate(var(--cf-rot, 200deg)) scale(0.4); }
+}
+
+
+/* ── Bear milestone screen flash ─────────────────────────── */
+.milestone-flash {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8500;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 50%,
+    rgba(232, 175, 168, 0.45) 0%,
+    transparent 70%
+  );
+  animation: milestone-glow 0.85s ease forwards;
+}
+
+@keyframes milestone-glow {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+
+/* ── Love Notes Jar (replaces audio section) ──────────────── */
+.jar-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 1.5rem 2rem;
+  border-radius: var(--radius-lg);
+  transition: background var(--t-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.jar-wrap:hover  { background: rgba(200, 121, 112, 0.05); }
+.jar-wrap:focus-visible { outline: 2px solid var(--rose); outline-offset: 4px; border-radius: var(--radius-lg); }
+
+.jar-emoji {
+  font-size: 3.8rem;
+  display: block;
+  transition: transform 0s;
+  user-select: none;
+  filter: drop-shadow(0 4px 10px rgba(100, 65, 50, 0.14));
+}
+
+.jar-emoji.jar-shake {
+  animation: jar-shake 0.5s var(--ease-spring) both;
+}
+
+@keyframes jar-shake {
+  0%   { transform: rotate(0deg)   scale(1); }
+  20%  { transform: rotate(-12deg) scale(1.06); }
+  40%  { transform: rotate(14deg)  scale(1.08); }
+  60%  { transform: rotate(-8deg)  scale(1.04); }
+  80%  { transform: rotate(6deg); }
+  100% { transform: rotate(0deg)   scale(1); }
+}
+
+.jar-prompt {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  transition: opacity var(--t-base);
+}
+
+.jar-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+  transition: opacity var(--t-base);
+}
+
+/* The revealed note */
+.note-display {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  animation: fade-in 0.3s ease both;
+}
+
+.note-text {
+  font-size: clamp(1rem, 3.5vw, 1.15rem);
+  color: var(--text-dark);
+  line-height: 1.75;
+  min-height: 4em;
+  text-align: center;
+  transition: opacity 0.2s;
+}
+
+.note-next-btn {
+  margin-top: 1.5rem;
+  font-size: 0.82rem;
+  color: var(--rose);
+  font-family: var(--font-body);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-pill);
+  transition:
+    opacity 0.3s,
+    background var(--t-fast),
+    transform var(--t-fast) var(--ease-spring);
+  opacity: 0;
+}
+
+.note-next-btn:hover {
+  background: var(--rose-pale);
+  transform: scale(1.05);
+}
+
+.note-next-btn:focus-visible {
+  outline: 2px solid var(--rose);
+  outline-offset: 3px;
+}
